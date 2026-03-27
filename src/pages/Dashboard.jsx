@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import StatCard from '../components/StatCard';
 import IncidentCard from '../components/IncidentCard';
-import MapPlaceholder from '../components/MapPlaceholder';
+import IncidentMap from '../components/IncidentMap';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StatusBadge from '../components/StatusBadge';
 import { useApi } from '../hooks/useApi';
@@ -94,7 +94,7 @@ export default function Dashboard() {
 
         {/* Map */}
         <div>
-          <MapPlaceholder />
+          <IncidentMap />
         </div>
       </div>
 
