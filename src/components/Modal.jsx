@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 export default function Modal({ open, onClose, title, children }) {
   useEffect(() => {
@@ -15,9 +16,9 @@ export default function Modal({ open, onClose, title, children }) {
 
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 modal-backdrop"
       onClick={onClose}
     >
       <div
@@ -35,10 +36,11 @@ export default function Modal({ open, onClose, title, children }) {
           </button>
         </div>
         {/* Body */}
-        <div className="px-6 py-5 max-h-[70vh] overflow-y-auto">
+        <div className="px-6 py-5 max-h-[80vh] overflow-y-auto">
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

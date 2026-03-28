@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Search, Filter, FileText } from 'lucide-react';
 import IncidentTable from '../components/IncidentTable';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -9,11 +10,20 @@ import { getIncidents } from '../api/mockApi';
 import { severityOptions, statusOptions } from '../data/mockData';
 
 export default function Incidents() {
+  const [searchParams] = useSearchParams();
   const { data: incidents, loading } = useApi(getIncidents);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(searchParams.get('q') || '');
   const [severityFilter, setSeverityFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [selected, setSelected] = useState(null);
+
+  // Sync search state with URL parameter if it changes
+  useEffect(() => {
+    const q = searchParams.get('q');
+    if (q !== null) {
+      setSearch(q);
+    }
+  }, [searchParams]);
 
   const filtered = useMemo(() => {
     if (!incidents) return [];

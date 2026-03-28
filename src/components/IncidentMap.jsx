@@ -68,10 +68,10 @@ export default function IncidentMap() {
             <Marker key={incident.id} position={incident.position}>
               <Popup>
                 <div className="space-y-1">
-                  <p className="text-xs font-semibold text-zinc-100">
+                  <p className="text-xs font-semibold text-white-100">
                     {incident.title}
                   </p>
-                  <p className="text-[11px] text-zinc-400">
+                  <p className="text-[11px] text-white-400">
                     {incident.description}
                   </p>
                   <p className="text-[10px] text-indigo-400 font-medium mt-1">
