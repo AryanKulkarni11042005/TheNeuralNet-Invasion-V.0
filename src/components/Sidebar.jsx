@@ -6,8 +6,9 @@ import {
   Shield,
   Radio,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
-const navItems = [
+const baseNavItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/report', label: 'Report Incident', icon: AlertTriangle },
   { to: '/incidents', label: 'Incidents', icon: FileText },
@@ -15,11 +16,23 @@ const navItems = [
 ];
 
 export default function Sidebar() {
+  const { role } = useAuth();
+
+  const navItems = baseNavItems.filter((item) => {
+    if (item.to === '/report' && !(role === 'operator' || role === 'volunteer')) {
+      return false;
+    }
+    if (item.to === '/admin' && role !== 'operator') {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <aside className="hidden lg:flex w-64 flex-col border-r border-zinc-800/60 bg-zinc-950/80">
       {/* Brand */}
       <div className="flex items-center gap-3 px-6 py-5 border-b border-zinc-800/60">
-        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-red-500 to-orange-500">
+        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-linear-to-br from-red-500 to-orange-500">
           <Radio className="w-5 h-5 text-white" />
         </div>
         <div>
@@ -38,12 +51,12 @@ export default function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-white/[0.08] text-white shadow-lg shadow-white/[0.02]'
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
+                  ? 'bg-white/8 text-white shadow-lg shadow-white/2'
+                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/4'
               }`
             }
           >
-            <Icon className="w-[18px] h-[18px]" />
+            <Icon className="w-4.5 h-4.5" />
             {label}
           </NavLink>
         ))}

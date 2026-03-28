@@ -1,6 +1,7 @@
 import { useLocation, useNavigate, NavLink } from 'react-router-dom';
 import { Bell, Search, Menu, Radio, AlertCircle } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { getIncidents } from '../api/mockApi';
 
 const pageTitles = {
@@ -10,19 +11,24 @@ const pageTitles = {
   '/admin': 'Command Panel',
 };
 
-const mobileNavItems = [
-  { to: '/', label: 'Dashboard' },
-  { to: '/report', label: 'Report' },
-  { to: '/incidents', label: 'Incidents' },
-  { to: '/admin', label: 'Admin' },
-];
-
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const title = pageTitles[location.pathname] || 'Invasion';
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [roleMenuOpen, setRoleMenuOpen] = useState(false);
+  const roleMenuRef = useRef(null);
+  const { role, setRole, roles, roleNames } = useAuth();
+  const roleAbbrev = role.slice(0, 2).toUpperCase();
+  const navItems = [
+    { to: '/', label: 'Dashboard' },
+    ...(role === 'operator' || role === 'volunteer' ? [{ to: '/report', label: 'Report' }] : []),
+    { to: '/incidents', label: 'Incidents' },
+    ...(role === 'operator' ? [{ to: '/admin', label: 'Admin' }] : []),
+  ];
+
+  const mobileNavItems = navItems;
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -43,6 +49,17 @@ export default function Header() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (roleMenuOpen && roleMenuRef.current && !roleMenuRef.current.contains(event.target)) {
+        setRoleMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [roleMenuOpen]);
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
       setSearchResults([]);
@@ -58,17 +75,17 @@ export default function Header() {
 
   return (
     <>
-      <header className="flex items-center justify-between gap-4 border-b border-zinc-800/60 bg-zinc-950 px-6 py-3.5 z-[100]">
+      <header className="flex items-center justify-between gap-4 border-b border-zinc-800/60 bg-zinc-950 px-6 py-3.5 z-100">
         <div className="flex items-center gap-3">
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] transition"
+            className="lg:hidden p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/6 transition"
           >
             <Menu className="w-5 h-5" />
           </button>
           <div className="lg:hidden flex items-center gap-2">
-            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-gradient-to-br from-red-500 to-orange-500">
+            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-linear-to-br from-red-500 to-orange-500">
               <Radio className="w-4 h-4 text-white" />
             </div>
           </div>
@@ -91,7 +108,7 @@ export default function Header() {
             </div>
 
             {searchResults.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-950 border border-zinc-800 shadow-2xl rounded-xl overflow-hidden z-[1000] animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-950 border border-zinc-800 shadow-2xl rounded-xl overflow-hidden z-1000 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="p-2 space-y-1">
                   {searchResults.map((result) => (
                     <button
@@ -101,7 +118,7 @@ export default function Header() {
                         setSearchQuery('');
                         navigate(`/incidents/${result.id}`);
                       }}
-                      className="w-full flex items-start gap-3 p-2 rounded-lg hover:bg-white/[0.04] transition text-left group"
+                      className="w-full flex items-start gap-3 p-2 rounded-lg hover:bg-white/4 transition text-left group"
                     >
                       <div className="mt-1">
                         <AlertCircle className={`w-3.5 h-3.5 ${result.severity === 'critical' ? 'text-red-400' : 'text-zinc-500'}`} />
@@ -115,7 +132,7 @@ export default function Header() {
                     </button>
                   ))}
                 </div>
-                <div className="bg-white/[0.02] p-2 border-t border-white/[0.05]">
+                <div className="bg-white/2 p-2 border-t border-white/5">
                   <button
                     onClick={() => {
                       setSearchResults([]);
@@ -135,8 +152,8 @@ export default function Header() {
             <button
               onClick={() => setNotificationsOpen(!notificationsOpen)}
               className={`p-2 rounded-xl transition ${notificationsOpen
-                  ? 'bg-white/[0.1] text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
+                  ? 'bg-white/10 text-white'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/6'
                 }`}
             >
               <Bell className="w-5 h-5" />
@@ -146,11 +163,11 @@ export default function Header() {
             {notificationsOpen && (
               <>
                 <div
-                  className="fixed inset-0 z-[999]"
+                  className="fixed inset-0 z-999"
                   onClick={() => setNotificationsOpen(false)}
                 />
-                <div className="absolute right-0 mt-2 w-80 z-[1000] bg-zinc-950 border border-zinc-800 shadow-2xl rounded-xl p-2 animate-in fade-in zoom-in duration-200 origin-top-right">
-                  <div className="flex items-center justify-between px-3 py-2 border-b border-white/[0.05] mb-2">
+                <div className="absolute right-0 mt-2 w-80 z-1000 bg-zinc-950 border border-zinc-800 shadow-2xl rounded-xl p-2 animate-in fade-in zoom-in duration-200 origin-top-right">
+                  <div className="flex items-center justify-between px-3 py-2 border-b border-white/5 mb-2">
                     <h3 className="text-xs font-semibold text-zinc-300">Notifications</h3>
                     <span className="text-[10px] text-indigo-400 cursor-pointer hover:underline">
                       Mark all as read
@@ -160,7 +177,7 @@ export default function Header() {
                     {notifications.map((n) => (
                       <div
                         key={n.id}
-                        className="p-2.5 rounded-lg hover:bg-white/[0.04] transition cursor-pointer group"
+                        className="p-2.5 rounded-lg hover:bg-white/4 transition cursor-pointer group"
                       >
                         <p className="text-xs text-zinc-300 group-hover:text-white transition">
                           {n.text}
@@ -169,7 +186,7 @@ export default function Header() {
                       </div>
                     ))}
                   </div>
-                  <div className="mt-2 pt-2 border-t border-white/[0.05] text-center">
+                  <div className="mt-2 pt-2 border-t border-white/5 text-center">
                     <button className="text-[10px] text-zinc-500 hover:text-zinc-300 transition">
                       View all notifications
                     </button>
@@ -179,9 +196,37 @@ export default function Header() {
             )}
           </div>
 
-          {/* Avatar */}
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">
-            OP
+          <div className="relative flex flex-col items-center" ref={roleMenuRef}>
+            <button
+              type="button"
+              className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white transition hover:scale-[1.03]"
+              onClick={() => setRoleMenuOpen((open) => !open)}
+              title={`Change role (current: ${roleNames[role]})`}
+            >
+              {roleAbbrev}
+            </button>
+            <span className="mt-1 text-[10px] text-zinc-400 hidden md:block">Change role</span>
+            {roleMenuOpen && (
+              <div className="absolute right-0 top-full mt-2 w-40 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl">
+                {roles.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    className={`w-full px-3 py-2 text-left text-sm transition ${
+                      option === role
+                        ? 'bg-white/10 text-white'
+                        : 'text-zinc-300 hover:bg-white/5 hover:text-white'
+                    }`}
+                    onClick={() => {
+                      setRole(option);
+                      setRoleMenuOpen(false);
+                    }}
+                  >
+                    {roleNames[option]}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -196,7 +241,7 @@ export default function Header() {
               end={to === '/'}
               onClick={() => setMobileOpen(false)}
               className={({ isActive }) =>
-                `block px-3 py-2 rounded-lg text-sm font-medium transition ${isActive ? 'bg-white/[0.08] text-white' : 'text-zinc-400 hover:text-white'
+                `block px-3 py-2 rounded-lg text-sm font-medium transition ${isActive ? 'bg-white/8 text-white' : 'text-zinc-400 hover:text-white'
                 }`
               }
             >
