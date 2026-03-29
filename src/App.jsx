@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import ReportIncident from './pages/ReportIncident';
 import Incidents from './pages/Incidents';
 import AdminPanel from './pages/AdminPanel';
+import VolunteerReview from './pages/VolunteerReview';
 import Unauthorized from './pages/Unauthorized';
 import NotFound from './pages/NotFound';
 
@@ -18,7 +19,7 @@ export default function App() {
           <Route
             path="/report"
             element={
-              <ProtectedRoute allowedRoles={['operator', 'volunteer']}>
+              <ProtectedRoute allowedRoles={['operator', 'volunteer', 'viewer']}>
                 <ReportIncident />
               </ProtectedRoute>
             }
@@ -29,6 +30,14 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={['operator']}>
                 <AdminPanel />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/review"
+            element={
+              <ProtectedRoute allowedRoles={['volunteer']}>
+                <VolunteerReview />
               </ProtectedRoute>
             }
           />

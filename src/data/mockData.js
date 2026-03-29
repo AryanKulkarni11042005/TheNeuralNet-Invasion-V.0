@@ -184,5 +184,5 @@ export const activityFeed = [
   { id: 10, message: 'Suspicious package at Transit Hub cleared — false alarm', time: '8 hr ago', type: 'resolution' },
 ];
 
-export const statusOptions = ['active', 'contained', 'monitoring', 'resolved'];
+export const statusOptions = ['pending', 'active', 'contained', 'monitoring', 'resolved'];
 export const severityOptions = ['critical', 'high', 'medium', 'low'];

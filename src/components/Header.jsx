@@ -9,12 +9,13 @@ const pageTitles = {
   '/report': 'Report Incident',
   '/incidents': 'Incidents',
   '/admin': 'Command Panel',
+  '/review': 'Validate Reports',
 };
 
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
-  const title = pageTitles[location.pathname] || 'Invasion';
+  const title = pageTitles[location.pathname] || 'RakshaNet';
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
@@ -23,9 +24,10 @@ export default function Header() {
   const roleAbbrev = role.slice(0, 2).toUpperCase();
   const navItems = [
     { to: '/', label: 'Dashboard' },
-    ...(role === 'operator' || role === 'volunteer' ? [{ to: '/report', label: 'Report' }] : []),
+    ...(role === 'operator' || role === 'volunteer' || role === 'viewer' ? [{ to: '/report', label: 'Report' }] : []),
     { to: '/incidents', label: 'Incidents' },
     ...(role === 'operator' ? [{ to: '/admin', label: 'Admin' }] : []),
+    ...(role === 'volunteer' ? [{ to: '/review', label: 'Validate Reports' }] : []),
   ];
 
   const mobileNavItems = navItems;

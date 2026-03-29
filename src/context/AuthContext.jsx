@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-const ROLE_KEY = 'invasion.userRole';
+const ROLE_KEY = 'rakshanet.userRole';
 const roles = ['operator', 'viewer', 'volunteer'];
 const roleNames = {
   operator: 'Operator',

@@ -15,7 +15,7 @@ import { getIncidents, updateIncident } from '../api/mockApi';
 import { teams, statusOptions } from '../data/mockData';
 
 export default function AdminPanel() {
-  const { data: incidents, loading, setData } = useApi(getIncidents);
+  const { data: incidents, loading, setData } = useApi(getIncidents, [{ includePending: true }]);
   const [selected, setSelected] = useState(null);
   const [updating, setUpdating] = useState(null); // incident id being updated
 

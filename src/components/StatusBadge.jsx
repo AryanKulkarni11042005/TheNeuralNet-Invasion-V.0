@@ -26,6 +26,12 @@ const severityConfig = {
 };
 
 const statusConfig = {
+  pending: {
+    bg: 'bg-zinc-700/20',
+    text: 'text-zinc-200',
+    border: 'border-zinc-600/30',
+    dot: 'bg-zinc-200',
+  },
   active: {
     bg: 'bg-blue-500/10',
     text: 'text-blue-400',

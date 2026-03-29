@@ -10,9 +10,11 @@ let incidents = JSON.parse(JSON.stringify(mockIncidents));
  * GET /incidents
  * Returns all incidents. Supports optional filters.
  */
-export async function getIncidents({ severity, status, search } = {}) {
+export async function getIncidents({ severity, status, search, includePending = false } = {}) {
   await delay(500);
-  let result = [...incidents];
+  let result = [...incidents].filter(
+    (i) => includePending || (i.status !== 'pending' && i.status !== 'rejected')
+  );
 
   if (severity) {
     result = result.filter((i) => i.severity === severity);
@@ -48,16 +50,17 @@ export async function getIncidentById(id) {
  */
 export async function createIncident(data) {
   await delay(800);
+  const isViewerReport = data.reporterRole === 'viewer';
   const newIncident = {
     id: `INC-${String(incidents.length + 1).padStart(3, '0')}`,
     title: data.title,
     description: data.description || '',
     severity: data.severity || 'medium',
-    status: 'active',
+    status: isViewerReport ? 'pending' : 'active',
     location: data.location || 'Unknown',
     time: new Date().toISOString(),
     assignedTo: null,
-    reportedBy: 'Manual Report',
+    reportedBy: data.reportedBy || (isViewerReport ? 'Viewer Submission' : 'Manual Report'),
     image: data.image || null,
   };
   incidents.unshift(newIncident);

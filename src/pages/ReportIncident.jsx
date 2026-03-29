@@ -9,11 +9,13 @@ import {
   CheckCircle2,
   Loader2,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { createIncident } from '../api/mockApi';
 import { severityOptions } from '../data/mockData';
 
 export default function ReportIncident() {
   const navigate = useNavigate();
+  const { role } = useAuth();
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -40,7 +42,11 @@ export default function ReportIncident() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    await createIncident(form);
+    await createIncident({
+      ...form,
+      reportedBy: role === 'viewer' ? 'Viewer Submission' : 'Manual Report',
+      reporterRole: role,
+    });
     setSubmitting(false);
     setSubmitted(true);
     setTimeout(() => navigate('/incidents'), 2000);
@@ -53,7 +59,12 @@ export default function ReportIncident() {
           <CheckCircle2 className="w-8 h-8 text-emerald-400" />
         </div>
         <h2 className="text-xl font-bold text-white mb-2">Incident Reported</h2>
-        <p className="text-sm text-zinc-500">Redirecting to incidents list...</p>
+        <p className="text-sm text-zinc-500 mb-2">
+          {role === 'viewer'
+            ? 'Your report is pending volunteer validation before it appears in the public log.'
+            : 'Redirecting to incidents list...'}
+        </p>
+        {role !== 'viewer' && <p className="text-sm text-zinc-500">Redirecting to incidents list...</p>}
       </div>
     );
   }

@@ -5,6 +5,7 @@ import {
   FileText,
   Shield,
   Radio,
+  ShieldCheck,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -13,16 +14,20 @@ const baseNavItems = [
   { to: '/report', label: 'Report Incident', icon: AlertTriangle },
   { to: '/incidents', label: 'Incidents', icon: FileText },
   { to: '/admin', label: 'Command Panel', icon: Shield },
+  { to: '/review', label: 'Validate Reports', icon: ShieldCheck },
 ];
 
 export default function Sidebar() {
   const { role } = useAuth();
 
   const navItems = baseNavItems.filter((item) => {
-    if (item.to === '/report' && !(role === 'operator' || role === 'volunteer')) {
+    if (item.to === '/report' && !(role === 'operator' || role === 'volunteer' || role === 'viewer')) {
       return false;
     }
     if (item.to === '/admin' && role !== 'operator') {
+      return false;
+    }
+    if (item.to === '/review' && role !== 'volunteer') {
       return false;
     }
     return true;
@@ -36,7 +41,7 @@ export default function Sidebar() {
           <Radio className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h1 className="text-lg font-bold tracking-tight text-white">INVASION</h1>
+          <h1 className="text-lg font-bold tracking-tight text-white">RakshaNet</h1>
           <p className="text-[10px] font-medium tracking-widest text-zinc-500 uppercase">Crisis Control</p>
         </div>
       </div>
