@@ -46,16 +46,13 @@ export default function Incidents() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-3" style={{ color: '#F0EAEA' }}>
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ backgroundColor: '#1E1717' }}
-            >
-              <FileText className="w-5 h-5" style={{ color: '#9B2C2C' }} />
+          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center">
+              <FileText className="w-5 h-5 text-indigo-400" />
             </div>
             Incidents Log
           </h1>
-          <p className="text-sm mt-1 ml-[52px]" style={{ color: '#7A6A6A' }}>
+          <p className="text-sm text-zinc-500 mt-1 ml-[52px]">
             {filtered.length} of {incidents?.length || 0} incidents
           </p>
         </div>
@@ -64,18 +61,14 @@ export default function Incidents() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Search */}
-        <div
-          className="flex-1 flex items-center gap-2 rounded-xl px-4 py-2.5"
-          style={{ backgroundColor: '#1E1717', border: '1px solid #221818' }}
-        >
-          <Search className="w-4 h-4 shrink-0" style={{ color: '#5A4A4A' }} />
+        <div className="flex-1 flex items-center gap-2 bg-zinc-900/60 border border-zinc-800/60 rounded-xl px-4 py-2.5">
+          <Search className="w-4 h-4 text-zinc-500 shrink-0" />
           <input
             type="text"
             placeholder="Search by title, location, or ID..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent w-full text-sm outline-none"
-            style={{ color: '#C4A9A9' }}
+            className="bg-transparent w-full text-sm text-zinc-300 placeholder:text-zinc-600 outline-none"
           />
         </div>
 
@@ -83,8 +76,7 @@ export default function Incidents() {
         <select
           value={severityFilter}
           onChange={(e) => setSeverityFilter(e.target.value)}
-          className="rounded-xl px-4 py-2.5 text-sm appearance-none cursor-pointer"
-          style={{ backgroundColor: '#1E1717', border: '1px solid #221818', color: '#C4A9A9' }}
+          className="bg-zinc-900/60 border border-zinc-800/60 rounded-xl px-4 py-2.5 text-sm text-zinc-300 appearance-none cursor-pointer"
         >
           <option value="">All Severities</option>
           {severityOptions.map((s) => (
@@ -98,8 +90,7 @@ export default function Incidents() {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-xl px-4 py-2.5 text-sm appearance-none cursor-pointer"
-          style={{ backgroundColor: '#1E1717', border: '1px solid #221818', color: '#C4A9A9' }}
+          className="bg-zinc-900/60 border border-zinc-800/60 rounded-xl px-4 py-2.5 text-sm text-zinc-300 appearance-none cursor-pointer"
         >
           <option value="">All Statuses</option>
           {statusOptions.map((s) => (
@@ -128,30 +119,30 @@ export default function Incidents() {
 
             <div className="space-y-3 text-sm">
               <div>
-                <span style={{ color: '#7A6A6A' }}>ID:</span>
-                <span className="ml-2 font-mono" style={{ color: '#C4A9A9' }}>{selected.id}</span>
+                <span className="text-zinc-500">ID:</span>
+                <span className="ml-2 text-zinc-300 font-mono">{selected.id}</span>
               </div>
               <div>
-                <span style={{ color: '#7A6A6A' }}>Location:</span>
-                <span className="ml-2" style={{ color: '#C4A9A9' }}>{selected.location}</span>
+                <span className="text-zinc-500">Location:</span>
+                <span className="ml-2 text-zinc-300">{selected.location}</span>
               </div>
               <div>
-                <span style={{ color: '#7A6A6A' }}>Assigned To:</span>
-                <span className="ml-2" style={{ color: '#C4A9A9' }}>{selected.assignedTo || 'Unassigned'}</span>
+                <span className="text-zinc-500">Assigned To:</span>
+                <span className="ml-2 text-zinc-300">{selected.assignedTo || 'Unassigned'}</span>
               </div>
               <div>
-                <span style={{ color: '#7A6A6A' }}>Reported By:</span>
-                <span className="ml-2" style={{ color: '#C4A9A9' }}>{selected.reportedBy}</span>
+                <span className="text-zinc-500">Reported By:</span>
+                <span className="ml-2 text-zinc-300">{selected.reportedBy}</span>
               </div>
               <div>
-                <span style={{ color: '#7A6A6A' }}>Time:</span>
-                <span className="ml-2" style={{ color: '#C4A9A9' }}>
+                <span className="text-zinc-500">Time:</span>
+                <span className="ml-2 text-zinc-300">
                   {new Date(selected.time).toLocaleString()}
                 </span>
               </div>
               <div>
-                <p className="mb-1" style={{ color: '#7A6A6A' }}>Description:</p>
-                <p className="leading-relaxed" style={{ color: '#C4A9A9' }}>{selected.description}</p>
+                <p className="text-zinc-500 mb-1">Description:</p>
+                <p className="text-zinc-300 leading-relaxed">{selected.description}</p>
               </div>
             </div>
           </div>

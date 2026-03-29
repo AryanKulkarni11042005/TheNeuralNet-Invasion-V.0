@@ -33,14 +33,11 @@ export default function Dashboard() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: '#F0EAEA' }}>Situation Overview</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#7A6A6A' }}>Real-time crisis monitoring dashboard</p>
+          <h1 className="text-2xl font-bold text-white">Situation Overview</h1>
+          <p className="text-sm text-zinc-500 mt-0.5">Real-time crisis monitoring dashboard</p>
         </div>
-        <div className="flex items-center gap-2 text-xs" style={{ color: '#7A6A6A' }}>
-          <span
-            className="w-2 h-2 rounded-full animate-pulse-dot"
-            style={{ backgroundColor: '#4A7A4A' }}
-          />
+        <div className="flex items-center gap-2 text-xs text-zinc-500">
+          <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse-dot" />
           Live — Last updated just now
         </div>
       </div>
@@ -82,11 +79,11 @@ export default function Dashboard() {
         {/* Active Incidents */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold flex items-center gap-2" style={{ color: '#C4A9A9' }}>
-              <AlertTriangle className="w-4 h-4" style={{ color: '#E05252' }} />
+            <h2 className="text-base font-semibold text-zinc-200 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-400" />
               Active Incidents
             </h2>
-            <span className="text-xs" style={{ color: '#7A6A6A' }}>{activeIncidents.length} ongoing</span>
+            <span className="text-xs text-zinc-500">{activeIncidents.length} ongoing</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {activeIncidents.slice(0, 4).map((inc) => (
@@ -103,22 +100,22 @@ export default function Dashboard() {
 
       {/* Recent Activity */}
       <div className="glass-card p-5">
-        <h2 className="text-base font-semibold flex items-center gap-2 mb-4" style={{ color: '#C4A9A9' }}>
-          <Clock className="w-4 h-4" style={{ color: '#9B2C2C' }} />
+        <h2 className="text-base font-semibold text-zinc-200 flex items-center gap-2 mb-4">
+          <Clock className="w-4 h-4 text-indigo-400" />
           Recent Activity
         </h2>
         <div className="space-y-0">
           {activity?.map((item, i) => (
             <div
               key={item.id}
-              className="flex items-start gap-3 px-3 py-3 rounded-lg transition"
+              className="flex items-start gap-3 px-3 py-3 rounded-lg hover:bg-white/[0.02] transition"
             >
               <div className="mt-1">
                 <ActivityIcon type={item.type} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm leading-relaxed" style={{ color: '#C4A9A9' }}>{item.message}</p>
-                <p className="text-xs mt-0.5" style={{ color: '#5A4A4A' }}>{item.time}</p>
+                <p className="text-sm text-zinc-300 leading-relaxed">{item.message}</p>
+                <p className="text-xs text-zinc-600 mt-0.5">{item.time}</p>
               </div>
             </div>
           ))}
@@ -130,20 +127,15 @@ export default function Dashboard() {
 
 function ActivityIcon({ type }) {
   const config = {
-    dispatch: { bg: '#1E1717', text: '#C4A9A9' },
-    escalation: { bg: '#2A0E0E', text: '#E05252' },
-    update: { bg: '#1A1515', text: '#7A6A6A' },
-    resolution: { bg: '#151E15', text: '#4A7A4A' },
-    new: { bg: '#1E1717', text: '#9B2C2C' },
+    dispatch: 'bg-blue-500/15 text-blue-400',
+    escalation: 'bg-red-500/15 text-red-400',
+    update: 'bg-zinc-500/15 text-zinc-400',
+    resolution: 'bg-emerald-500/15 text-emerald-400',
+    new: 'bg-purple-500/15 text-purple-400',
   };
 
-  const c = config[type] || config.update;
-
   return (
-    <div
-      className="w-7 h-7 rounded-lg flex items-center justify-center"
-      style={{ backgroundColor: c.bg, color: c.text }}
-    >
+    <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${config[type] || config.update}`}>
       <Radio className="w-3.5 h-3.5" />
     </div>
   );

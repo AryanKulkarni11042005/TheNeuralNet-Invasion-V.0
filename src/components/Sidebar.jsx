@@ -29,24 +29,15 @@ export default function Sidebar() {
   });
 
   return (
-    <aside
-      className="hidden lg:flex w-64 flex-col"
-      style={{ backgroundColor: '#111010', borderRight: '1px solid #221818' }}
-    >
+    <aside className="hidden lg:flex w-64 flex-col border-r border-zinc-800/60 bg-zinc-950/80">
       {/* Brand */}
-      <div
-        className="flex items-center gap-3 px-6 py-5"
-        style={{ borderBottom: '1px solid #221818' }}
-      >
-        <div
-          className="flex items-center justify-center w-9 h-9 rounded-lg"
-          style={{ backgroundColor: '#7A1818' }}
-        >
-          <Radio className="w-5 h-5" style={{ color: '#F0EAEA' }} />
+      <div className="flex items-center gap-3 px-6 py-5 border-b border-zinc-800/60">
+        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-linear-to-br from-red-500 to-orange-500">
+          <Radio className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h1 className="text-lg font-bold tracking-tight" style={{ color: '#F0EAEA' }}>INVASION</h1>
-          <p className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#5A4A4A' }}>Crisis Control</p>
+          <h1 className="text-lg font-bold tracking-tight text-white">INVASION</h1>
+          <p className="text-[10px] font-medium tracking-widest text-zinc-500 uppercase">Crisis Control</p>
         </div>
       </div>
 
@@ -58,12 +49,11 @@ export default function Sidebar() {
             to={to}
             end={to === '/'}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200`
-            }
-            style={({ isActive }) =>
-              isActive
-                ? { backgroundColor: '#2A1515', color: '#C4A9A9' }
-                : { color: '#7A6A6A' }
+              `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                isActive
+                  ? 'bg-white/8 text-white shadow-lg shadow-white/2'
+                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/4'
+              }`
             }
           >
             <Icon className="w-4.5 h-4.5" />
@@ -73,16 +63,13 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-4 py-4" style={{ borderTop: '1px solid #221818' }}>
+      <div className="px-4 py-4 border-t border-zinc-800/60">
         <div className="glass-card px-3 py-3">
           <div className="flex items-center gap-2 mb-1.5">
-            <span
-              className="w-2 h-2 rounded-full animate-pulse-dot"
-              style={{ backgroundColor: '#4A7A4A' }}
-            />
-            <span className="text-xs font-medium" style={{ color: '#C4A9A9' }}>System Online</span>
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse-dot" />
+            <span className="text-xs font-medium text-zinc-300">System Online</span>
           </div>
-          <p className="text-[10px]" style={{ color: '#3A2A2A' }}>v0.1.0 — Prototype</p>
+          <p className="text-[10px] text-zinc-500">v0.1.0 — Prototype</p>
         </div>
       </div>
     </aside>

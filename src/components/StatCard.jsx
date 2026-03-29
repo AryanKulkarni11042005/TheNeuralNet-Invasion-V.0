@@ -1,48 +1,44 @@
 export default function StatCard({ label, value, icon: Icon, color = 'blue', trend }) {
   const colorMap = {
-    blue: { bg: '#1A1515', border: '#221818', text: '#C4A9A9' },
-    red: { bg: '#1E1212', border: '#2A1818', text: '#E05252' },
-    green: { bg: '#151E15', border: '#1A2A1A', text: '#4A7A4A' },
-    yellow: { bg: '#1E1A12', border: '#2A2218', text: '#B07030' },
-    purple: { bg: '#1A1515', border: '#221818', text: '#C4A9A9' },
-    orange: { bg: '#1E1A12', border: '#2A2218', text: '#B07030' },
+    blue: 'from-blue-500/20 to-blue-600/5 border-blue-500/20 text-blue-400',
+    red: 'from-red-500/20 to-red-600/5 border-red-500/20 text-red-400',
+    green: 'from-emerald-500/20 to-emerald-600/5 border-emerald-500/20 text-emerald-400',
+    yellow: 'from-yellow-500/20 to-yellow-600/5 border-yellow-500/20 text-yellow-400',
+    purple: 'from-purple-500/20 to-purple-600/5 border-purple-500/20 text-purple-400',
+    orange: 'from-orange-500/20 to-orange-600/5 border-orange-500/20 text-orange-400',
   };
 
   const iconBgMap = {
-    blue: { bg: '#1E1717', text: '#C4A9A9' },
-    red: { bg: '#2A0E0E', text: '#E05252' },
-    green: { bg: '#151E15', text: '#4A7A4A' },
-    yellow: { bg: '#2A1A0A', text: '#B07030' },
-    purple: { bg: '#1E1717', text: '#C4A9A9' },
-    orange: { bg: '#2A1A0A', text: '#B07030' },
+    blue: 'bg-blue-500/15 text-blue-400',
+    red: 'bg-red-500/15 text-red-400',
+    green: 'bg-emerald-500/15 text-emerald-400',
+    yellow: 'bg-yellow-500/15 text-yellow-400',
+    purple: 'bg-purple-500/15 text-purple-400',
+    orange: 'bg-orange-500/15 text-orange-400',
   };
-
-  const c = colorMap[color] || colorMap.blue;
-  const ic = iconBgMap[color] || iconBgMap.blue;
 
   return (
     <div
-      className="relative overflow-hidden rounded-2xl p-5 transition-all hover:scale-[1.02]"
-      style={{ backgroundColor: c.bg, border: `1px solid ${c.border}` }}
+      className={`relative overflow-hidden rounded-2xl border bg-gradient-to-br p-5 transition-all hover:scale-[1.02] ${colorMap[color]}`}
     >
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm font-medium" style={{ color: '#7A6A6A' }}>{label}</p>
-          <p className="mt-2 text-3xl font-bold" style={{ color: '#F0EAEA' }}>{value}</p>
+          <p className="text-sm text-zinc-400 font-medium">{label}</p>
+          <p className="mt-2 text-3xl font-bold text-white">{value}</p>
           {trend && (
-            <p className="mt-1 text-xs font-medium" style={{ color: trend > 0 ? '#9B3030' : '#4A7A4A' }}>
+            <p className={`mt-1 text-xs font-medium ${trend > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
               {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}% from yesterday
             </p>
           )}
         </div>
         {Icon && (
-          <div className="rounded-xl p-2.5" style={{ backgroundColor: ic.bg, color: ic.text }}>
+          <div className={`rounded-xl p-2.5 ${iconBgMap[color]}`}>
             <Icon className="w-5 h-5" />
           </div>
         )}
       </div>
       {/* Decorative gradient blob */}
-      <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full blur-2xl" style={{ backgroundColor: 'rgba(155, 44, 44, 0.03)' }} />
+      <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full bg-white/[0.03] blur-2xl" />
     </div>
   );
 }

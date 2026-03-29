@@ -1,54 +1,54 @@
 const severityConfig = {
   critical: {
-    bg: '#2A0E0E',
-    text: '#E05252',
-    border: '#3A1818',
-    dot: '#E05252',
+    bg: 'bg-red-500/10',
+    text: 'text-red-400',
+    border: 'border-red-500/20',
+    dot: 'bg-red-400',
   },
   high: {
-    bg: '#2A1A0A',
-    text: '#B07030',
-    border: '#3A2818',
-    dot: '#B07030',
+    bg: 'bg-orange-500/10',
+    text: 'text-orange-400',
+    border: 'border-orange-500/20',
+    dot: 'bg-orange-400',
   },
   medium: {
-    bg: '#2A1A0A',
-    text: '#B07030',
-    border: '#3A2818',
-    dot: '#B07030',
+    bg: 'bg-yellow-500/10',
+    text: 'text-yellow-400',
+    border: 'border-yellow-500/20',
+    dot: 'bg-yellow-400',
   },
   low: {
-    bg: '#1A1515',
-    text: '#7A6A6A',
-    border: '#221818',
-    dot: '#7A6A6A',
+    bg: 'bg-zinc-500/10',
+    text: 'text-zinc-400',
+    border: 'border-zinc-500/20',
+    dot: 'bg-zinc-400',
   },
 };
 
 const statusConfig = {
   active: {
-    bg: '#2A1515',
-    text: '#C4A9A9',
-    border: '#3A2020',
-    dot: '#C4A9A9',
+    bg: 'bg-blue-500/10',
+    text: 'text-blue-400',
+    border: 'border-blue-500/20',
+    dot: 'bg-blue-400',
   },
   contained: {
-    bg: '#2A1515',
-    text: '#C4A9A9',
-    border: '#3A2020',
-    dot: '#C4A9A9',
+    bg: 'bg-amber-500/10',
+    text: 'text-amber-400',
+    border: 'border-amber-500/20',
+    dot: 'bg-amber-400',
   },
   monitoring: {
-    bg: '#2A1515',
-    text: '#C4A9A9',
-    border: '#3A2020',
-    dot: '#C4A9A9',
+    bg: 'bg-purple-500/10',
+    text: 'text-purple-400',
+    border: 'border-purple-500/20',
+    dot: 'bg-purple-400',
   },
   resolved: {
-    bg: '#151E15',
-    text: '#4A7A4A',
-    border: '#1A2A1A',
-    dot: '#4A7A4A',
+    bg: 'bg-emerald-500/10',
+    text: 'text-emerald-400',
+    border: 'border-emerald-500/20',
+    dot: 'bg-emerald-400',
   },
 };
 
@@ -58,17 +58,9 @@ export default function StatusBadge({ value, type = 'status' }) {
 
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold"
-      style={{
-        backgroundColor: style.bg,
-        color: style.text,
-        border: `1px solid ${style.border}`,
-      }}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border ${style.bg} ${style.text} ${style.border}`}
     >
-      <span
-        className="w-1.5 h-1.5 rounded-full"
-        style={{ backgroundColor: style.dot }}
-      />
+      <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
       {value?.charAt(0).toUpperCase() + value?.slice(1)}
     </span>
   );

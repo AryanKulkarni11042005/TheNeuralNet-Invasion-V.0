@@ -22,20 +22,15 @@ export default function Modal({ open, onClose, title, children }) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg rounded-2xl shadow-2xl animate-fade-in-up"
-        style={{ border: '1px solid #2A1818', backgroundColor: '#1A1515' }}
+        className="w-full max-w-lg rounded-2xl border border-zinc-700/60 bg-zinc-900 shadow-2xl animate-fade-in-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div
-          className="flex items-center justify-between px-6 py-4"
-          style={{ borderBottom: '1px solid #221818' }}
-        >
-          <h3 className="text-base font-semibold" style={{ color: '#F0EAEA' }}>{title}</h3>
+        <div className="flex items-center justify-between border-b border-zinc-800/60 px-6 py-4">
+          <h3 className="text-base font-semibold text-white">{title}</h3>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg transition"
-            style={{ color: '#7A6A6A' }}
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] transition"
           >
             <X className="w-4 h-4" />
           </button>

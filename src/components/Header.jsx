@@ -75,54 +75,40 @@ export default function Header() {
 
   return (
     <>
-      <header
-        className="flex items-center justify-between gap-4 px-6 py-3.5 z-100"
-        style={{ backgroundColor: '#111010', borderBottom: '1px solid #221818' }}
-      >
+      <header className="flex items-center justify-between gap-4 border-b border-zinc-800/60 bg-zinc-950 px-6 py-3.5 z-100">
         <div className="flex items-center gap-3">
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 rounded-lg transition"
-            style={{ color: '#7A6A6A' }}
+            className="lg:hidden p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/6 transition"
           >
             <Menu className="w-5 h-5" />
           </button>
           <div className="lg:hidden flex items-center gap-2">
-            <div
-              className="flex items-center justify-center w-7 h-7 rounded-md"
-              style={{ backgroundColor: '#7A1818' }}
-            >
-              <Radio className="w-4 h-4" style={{ color: '#F0EAEA' }} />
+            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-linear-to-br from-red-500 to-orange-500">
+              <Radio className="w-4 h-4 text-white" />
             </div>
           </div>
-          <h2 className="text-lg font-semibold hidden sm:block" style={{ color: '#F0EAEA' }}>{title}</h2>
+          <h2 className="text-lg font-semibold text-white hidden sm:block">{title}</h2>
         </div>
 
         <div className="flex items-center gap-2">
           {/* Search */}
           <div className="relative hidden md:block">
-            <div
-              className="flex items-center gap-2 rounded-xl px-3 py-2 transition-all duration-300"
-              style={{ backgroundColor: '#1E1717', border: '1px solid #221818' }}
-            >
-              <Search className="w-4 h-4" style={{ color: '#5A4A4A' }} />
+            <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 focus-within:border-indigo-500/50 transition-all duration-300">
+              <Search className="w-4 h-4 text-zinc-500" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Search incidents..."
-                className="bg-transparent text-sm w-40 focus:w-56 transition-all duration-300 outline-none"
-                style={{ color: '#C4A9A9', '::placeholder': { color: '#5A4A4A' } }}
+                className="bg-transparent text-sm text-zinc-300 placeholder:text-zinc-600 w-40 focus:w-56 transition-all duration-300 outline-none"
               />
             </div>
 
             {searchResults.length > 0 && (
-              <div
-                className="absolute top-full left-0 right-0 mt-2 shadow-2xl rounded-xl overflow-hidden z-1000 animate-in fade-in slide-in-from-top-2 duration-200"
-                style={{ backgroundColor: '#111010', border: '1px solid #221818' }}
-              >
+              <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-950 border border-zinc-800 shadow-2xl rounded-xl overflow-hidden z-1000 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="p-2 space-y-1">
                   {searchResults.map((result) => (
                     <button
@@ -132,32 +118,27 @@ export default function Header() {
                         setSearchQuery('');
                         navigate(`/incidents/${result.id}`);
                       }}
-                      className="w-full flex items-start gap-3 p-2 rounded-lg transition text-left group"
-                      style={{ ':hover': { backgroundColor: '#1E1717' } }}
+                      className="w-full flex items-start gap-3 p-2 rounded-lg hover:bg-white/4 transition text-left group"
                     >
                       <div className="mt-1">
-                        <AlertCircle
-                          className="w-3.5 h-3.5"
-                          style={{ color: result.severity === 'critical' ? '#E05252' : '#5A4A4A' }}
-                        />
+                        <AlertCircle className={`w-3.5 h-3.5 ${result.severity === 'critical' ? 'text-red-400' : 'text-zinc-500'}`} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium transition truncate" style={{ color: '#C4A9A9' }}>
+                        <p className="text-xs font-medium text-zinc-300 group-hover:text-white transition truncate">
                           {result.title}
                         </p>
-                        <p className="text-[10px] truncate" style={{ color: '#5A4A4A' }}>{result.location}</p>
+                        <p className="text-[10px] text-zinc-600 truncate">{result.location}</p>
                       </div>
                     </button>
                   ))}
                 </div>
-                <div className="p-2" style={{ borderTop: '1px solid #221818', backgroundColor: '#1A1515' }}>
+                <div className="bg-white/2 p-2 border-t border-white/5">
                   <button
                     onClick={() => {
                       setSearchResults([]);
                       navigate(`/incidents?q=${encodeURIComponent(searchQuery)}`);
                     }}
-                    className="w-full text-[10px] transition font-medium"
-                    style={{ color: '#7A6A6A' }}
+                    className="w-full text-[10px] text-zinc-500 hover:text-indigo-400 transition font-medium"
                   >
                     View all results for "{searchQuery}"
                   </button>
@@ -170,17 +151,13 @@ export default function Header() {
           <div className="relative">
             <button
               onClick={() => setNotificationsOpen(!notificationsOpen)}
-              className="p-2 rounded-xl transition"
-              style={{
-                backgroundColor: notificationsOpen ? '#2A1515' : 'transparent',
-                color: notificationsOpen ? '#C4A9A9' : '#7A6A6A',
-              }}
+              className={`p-2 rounded-xl transition ${notificationsOpen
+                  ? 'bg-white/10 text-white'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/6'
+                }`}
             >
               <Bell className="w-5 h-5" />
-              <span
-                className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full"
-                style={{ backgroundColor: '#E05252', border: '2px solid #111010' }}
-              />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-zinc-950" />
             </button>
 
             {notificationsOpen && (
@@ -189,16 +166,10 @@ export default function Header() {
                   className="fixed inset-0 z-999"
                   onClick={() => setNotificationsOpen(false)}
                 />
-                <div
-                  className="absolute right-0 mt-2 w-80 z-1000 shadow-2xl rounded-xl p-2 animate-in fade-in zoom-in duration-200 origin-top-right"
-                  style={{ backgroundColor: '#111010', border: '1px solid #221818' }}
-                >
-                  <div
-                    className="flex items-center justify-between px-3 py-2 mb-2"
-                    style={{ borderBottom: '1px solid #221818' }}
-                  >
-                    <h3 className="text-xs font-semibold" style={{ color: '#C4A9A9' }}>Notifications</h3>
-                    <span className="text-[10px] cursor-pointer hover:underline" style={{ color: '#9B2C2C' }}>
+                <div className="absolute right-0 mt-2 w-80 z-1000 bg-zinc-950 border border-zinc-800 shadow-2xl rounded-xl p-2 animate-in fade-in zoom-in duration-200 origin-top-right">
+                  <div className="flex items-center justify-between px-3 py-2 border-b border-white/5 mb-2">
+                    <h3 className="text-xs font-semibold text-zinc-300">Notifications</h3>
+                    <span className="text-[10px] text-indigo-400 cursor-pointer hover:underline">
                       Mark all as read
                     </span>
                   </div>
@@ -206,17 +177,17 @@ export default function Header() {
                     {notifications.map((n) => (
                       <div
                         key={n.id}
-                        className="p-2.5 rounded-lg transition cursor-pointer group"
+                        className="p-2.5 rounded-lg hover:bg-white/4 transition cursor-pointer group"
                       >
-                        <p className="text-xs transition" style={{ color: '#C4A9A9' }}>
+                        <p className="text-xs text-zinc-300 group-hover:text-white transition">
                           {n.text}
                         </p>
-                        <p className="text-[10px] mt-1" style={{ color: '#5A4A4A' }}>{n.time}</p>
+                        <p className="text-[10px] text-zinc-500 mt-1">{n.time}</p>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-2 pt-2 text-center" style={{ borderTop: '1px solid #221818' }}>
-                    <button className="text-[10px] transition" style={{ color: '#7A6A6A' }}>
+                  <div className="mt-2 pt-2 border-t border-white/5 text-center">
+                    <button className="text-[10px] text-zinc-500 hover:text-zinc-300 transition">
                       View all notifications
                     </button>
                   </div>
@@ -228,28 +199,24 @@ export default function Header() {
           <div className="relative flex flex-col items-center" ref={roleMenuRef}>
             <button
               type="button"
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold transition hover:scale-[1.03]"
+              className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white transition hover:scale-[1.03]"
               onClick={() => setRoleMenuOpen((open) => !open)}
               title={`Change role (current: ${roleNames[role]})`}
-              style={{ backgroundColor: '#9B2C2C', color: '#F0EAEA' }}
             >
               {roleAbbrev}
             </button>
-            <span className="mt-1 text-[10px] hidden md:block" style={{ color: '#7A6A6A' }}>Change role</span>
+            <span className="mt-1 text-[10px] text-zinc-400 hidden md:block">Change role</span>
             {roleMenuOpen && (
-              <div
-                className="absolute right-0 top-full mt-2 w-40 overflow-hidden rounded-2xl shadow-2xl"
-                style={{ border: '1px solid #221818', backgroundColor: '#111010' }}
-              >
+              <div className="absolute right-0 top-full mt-2 w-40 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl">
                 {roles.map((option) => (
                   <button
                     key={option}
                     type="button"
-                    className="w-full px-3 py-2 text-left text-sm transition"
-                    style={{
-                      backgroundColor: option === role ? '#2A1515' : 'transparent',
-                      color: option === role ? '#C4A9A9' : '#7A6A6A',
-                    }}
+                    className={`w-full px-3 py-2 text-left text-sm transition ${
+                      option === role
+                        ? 'bg-white/10 text-white'
+                        : 'text-zinc-300 hover:bg-white/5 hover:text-white'
+                    }`}
                     onClick={() => {
                       setRole(option);
                       setRoleMenuOpen(false);
@@ -266,21 +233,16 @@ export default function Header() {
 
       {/* Mobile nav dropdown */}
       {mobileOpen && (
-        <div
-          className="lg:hidden backdrop-blur px-4 py-3 space-y-1"
-          style={{ borderBottom: '1px solid #221818', backgroundColor: 'rgba(26, 21, 21, 0.95)' }}
-        >
+        <div className="lg:hidden border-b border-zinc-800/60 bg-zinc-900/95 backdrop-blur px-4 py-3 space-y-1">
           {mobileNavItems.map(({ to, label }) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/'}
               onClick={() => setMobileOpen(false)}
-              className="block px-3 py-2 rounded-lg text-sm font-medium transition"
-              style={({ isActive }) =>
-                isActive
-                  ? { backgroundColor: '#2A1515', color: '#C4A9A9' }
-                  : { color: '#7A6A6A' }
+              className={({ isActive }) =>
+                `block px-3 py-2 rounded-lg text-sm font-medium transition ${isActive ? 'bg-white/8 text-white' : 'text-zinc-400 hover:text-white'
+                }`
               }
             >
               {label}
