@@ -1,10 +1,56 @@
 import { incidents as mockIncidents, stats as mockStats, activityFeed as mockActivity } from '../data/mockData';
 
+const LOCAL_INCIDENTS_KEY = 'rakshanet.localIncidents';
+const LOCAL_INCIDENT_TTL = 20 * 60 * 1000; // 20 minutes
+
 // Simulate network delay
 const delay = (ms = 600) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const loadLocalIncidents = () => {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(LOCAL_INCIDENTS_KEY);
+    if (!raw) return [];
+    const saved = JSON.parse(raw);
+    const now = Date.now();
+    const valid = Array.isArray(saved)
+      ? saved.filter((item) => item && item.createdAt && now - item.createdAt < LOCAL_INCIDENT_TTL)
+      : [];
+    if (valid.length !== (saved?.length ?? 0)) {
+      window.localStorage.setItem(LOCAL_INCIDENTS_KEY, JSON.stringify(valid));
+    }
+    return valid;
+  } catch (error) {
+    return [];
+  }
+};
+
+const saveLocalIncidents = (items) => {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(LOCAL_INCIDENTS_KEY, JSON.stringify(items));
+  } catch (error) {
+    // ignore localStorage write failures
+  }
+};
+
+const syncLocalIncidents = (incident) => {
+  if (typeof window === 'undefined') return;
+  const raw = window.localStorage.getItem(LOCAL_INCIDENTS_KEY);
+  if (!raw) return;
+  try {
+    const saved = JSON.parse(raw);
+    const updated = (Array.isArray(saved) ? saved : []).map((item) =>
+      item?.id === incident.id ? { ...item, ...incident, createdAt: item.createdAt } : item
+    );
+    saveLocalIncidents(updated);
+  } catch (error) {
+    // ignore
+  }
+};
+
 // In-memory store (clone so we can mutate)
-let incidents = JSON.parse(JSON.stringify(mockIncidents));
+let incidents = [...loadLocalIncidents(), ...JSON.parse(JSON.stringify(mockIncidents))];
 
 /**
  * GET /incidents
@@ -64,6 +110,10 @@ export async function createIncident(data) {
     image: data.image || null,
   };
   incidents.unshift(newIncident);
+  if (typeof window !== 'undefined') {
+    const localItems = loadLocalIncidents();
+    saveLocalIncidents([{ ...newIncident, createdAt: Date.now() }, ...localItems]);
+  }
   return { data: newIncident, ok: true };
 }
 
@@ -75,7 +125,9 @@ export async function updateIncident(id, updates) {
   const index = incidents.findIndex((i) => i.id === id);
   if (index === -1) return { data: null, ok: false, error: 'Incident not found' };
   incidents[index] = { ...incidents[index], ...updates };
-  return { data: { ...incidents[index] }, ok: true };
+  const updatedIncident = { ...incidents[index] };
+  syncLocalIncidents(updatedIncident);
+  return { data: updatedIncident, ok: true };
 }
 
 /**
