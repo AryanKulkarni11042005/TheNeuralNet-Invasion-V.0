@@ -44,7 +44,9 @@ export default function VolunteerReview() {
 
       {pendingReports.length === 0 ? (
         <div className="glass-card p-8 text-center text-zinc-300">
-          <p className="text-sm">No pending viewer reports at the moment.</p>
+          <p className="text-sm">
+            No pending viewer reports at the moment. Change your role to Viewer and add a report to see it here.
+          </p>
         </div>
       ) : (
         <div className="space-y-4">
